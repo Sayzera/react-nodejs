@@ -191,6 +191,7 @@ exports.login = async (req, res) => {
     first_name: user.first_name,
     last_name: user.last_name,
     token: token,
+    message: "Login successful",
   })
 }
 // XUQwt=Lz5g2Lsjv&ytN7/CqFG=kA8S

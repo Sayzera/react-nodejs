@@ -76,5 +76,55 @@ a {
 
 
 
+.middle_icon {
+  @apply relative flex items-center justify-center w-[125px] h-[50px] rounded-md
+  translate-x-[-2px]
+}
+.middle_icon:nth-child(2) {
+  @apply translate-x-[-2px]
+}
+
+.middle_icon:nth-child(3) {
+  @apply translate-x-[-3px]
+}
+
+.middle_icon:nth-child(4) {
+  @apply translate-x-[-4px]
+}
+
+.middle_icon:nth-child(5) {
+  @apply translate-x-[-5px]
+}
+
+.active {
+  @apply  border-b-2 border-[#0f90f3] rounded-none h-[56px]
+  translate-x-[0px] 
+}
+
+.active svg {
+  @apply translate-y-[1px] translate-x-[-1px]
+}
 
 
+
+.hover1:hover {
+  @apply bg-secondary
+}
+
+.hover2:hover {
+  @apply bg-third
+}
+
+.circle_icon {
+  @apply relative h-[40px] w-[40px] rounded-full flex items-center justify-center mr-[8px] 
+  bg-third cursor-pointer hover1
+
+}
+
+.my-card {
+  @apply h-[500px] w-[500px] bg-red-900
+}
+
+.circle {
+  @apply w-[40px] h-[40px] rounded cursor-pointer flex justify-center items-center
+}

@@ -1,23 +1,30 @@
-import { Formik, Form } from "formik"
-import React, { useState } from "react"
-import RegisterInput from "../inputs/registerinput"
-import * as Yup from "yup"
-import DateOfBirthSelect from "./DateOfBirthSelect"
-import GenderSelect from "./GenderSelect"
-import axios from "axios"
+import { Formik, Form } from 'formik';
+import React, { useState } from 'react';
+import RegisterInput from '../inputs/registerinput';
+import * as Yup from 'yup';
+import DateOfBirthSelect from './DateOfBirthSelect';
+import GenderSelect from './GenderSelect';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setUserData } from '../../reducers/userSlice';
+import { useNavigate } from 'react-router-dom';
+import { setVisibleRegisterForm } from '../../reducers/generalSlice';
+
 const userInfo = {
-  first_name: "",
-  last_name: "",
-  email: "",
-  password: "",
+  first_name: '',
+  last_name: '',
+  email: '',
+  password: '',
   bYear: 1996,
   bMonth: 1,
   bDay: 9,
-  gender: "",
-}
+  gender: '',
+};
 
 export default function RegisterForm() {
-  const [user, setUser] = useState(userInfo)
+  const navigate = useNavigate();
+  const [user, setUser] = useState(userInfo);
+  const dispatch = useDispatch();
   const {
     first_name,
     last_name,
@@ -27,49 +34,49 @@ export default function RegisterForm() {
     bMonth,
     bDay,
     gender,
-  } = user
-  const [dateError, setDateError] = useState("")
-  const [genderError, setGenderError] = useState("")
+  } = user;
+  const [dateError, setDateError] = useState('');
+  const [genderError, setGenderError] = useState('');
   const handleRegisterChange = (e) => {
-    const { name, value } = e.target
-    setUser({ ...user, [name]: value })
-  }
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
+  };
 
-  const currentYear = new Date().getFullYear()
-  const minAge = 18
+  const currentYear = new Date().getFullYear();
+  const minAge = 18;
   const birtYearOptions = Array.from(
     new Array(currentYear - (minAge + 1920) + 1),
     (val, index) => {
-      return currentYear - (minAge + index)
+      return currentYear - (minAge + index);
     }
-  )
+  );
 
   // Validation
   const registerValidation = Yup.object().shape({
     first_name: Yup.string()
       .required("What's your First name?")
-      .min(2, "First name must be between 2 and 16 characters.")
-      .max(16, "First name must be between 2 and 16 characters.")
-      .matches(/^[aA-zZ]+$/, "Numbers and special characters are not allowed"),
+      .min(2, 'First name must be between 2 and 16 characters.')
+      .max(16, 'First name must be between 2 and 16 characters.')
+      .matches(/^[aA-zZ]+$/, 'Numbers and special characters are not allowed'),
     last_name: Yup.string()
       .required("What's your Last name?")
-      .min(2, "Last name must be between 2 and 16 characters.")
-      .max(16, "Last name must be between 2 and 16 characters.")
-      .matches(/^[aA-zZ]+$/, "Numbers and special characters are not allowed"),
-    email: Yup.string().required("What's your email?").email("Invalid email"),
+      .min(2, 'Last name must be between 2 and 16 characters.')
+      .max(16, 'Last name must be between 2 and 16 characters.')
+      .matches(/^[aA-zZ]+$/, 'Numbers and special characters are not allowed'),
+    email: Yup.string().required("What's your email?").email('Invalid email'),
     password: Yup.string()
       .required("What's your password?")
-      .min(6, "Password must be between 6 and 16 characters.")
-      .max(16, "Password must be between 6 and 16 characters."),
-  })
+      .min(6, 'Password must be between 6 and 16 characters.')
+      .max(16, 'Password must be between 6 and 16 characters.'),
+  });
 
   // Register Submit(
-  const [error, setError] = useState("")
-  const [success, setSuccess] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
   const registerSubmit = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
 
       const { data } = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/register`,
@@ -83,32 +90,40 @@ export default function RegisterForm() {
           bDay,
           gender,
         }
-      )
+      );
 
-      const { message, ...rest } = data
+      const { message, ...rest } = data;
+      dispatch(setUserData(rest));
+      dispatch(setVisibleRegisterForm(false));
+      navigate('/');
 
-      setError("")
-      setSuccess(data.message)
-      setLoading(false)
+      setError('');
+      setSuccess(data.message);
+      setLoading(false);
     } catch (e) {
-      setLoading(false)
-      setSuccess("")
+      setLoading(false);
+      setSuccess('');
       if (e.response?.data?.message) {
-        setError(e.response.data.message)
+        setError(e.response.data.message);
       } else {
-        setError("Something went wrong")
+        setError('Something went wrong');
       }
 
       // Error handling
     }
-  }
+  };
 
-  if (loading) return <div className="loading"></div>
+  if (loading) return <div className="loading"></div>;
   return (
     <div className="blur_2">
       <div className="register">
         <div className="register_header">
-          <i className="exit_icon"></i>
+          <i
+            onClick={() => {
+              dispatch(setVisibleRegisterForm(false));
+            }}
+            className="exit_icon"
+          ></i>
           <span>Sign Up</span>
           <span>it's quick and easy</span>
         </div>
@@ -126,25 +141,25 @@ export default function RegisterForm() {
           }}
           validationSchema={registerValidation}
           onSubmit={(values) => {
-            let currentData = new Date()
+            let currentData = new Date();
             // Tarihi doğru almak için aydan 1 çıkartıyoruz.
-            let birthData = new Date(bYear, bMonth - 1, bDay)
+            let birthData = new Date(bYear, bMonth - 1, bDay);
 
             if (currentData.getFullYear() - birthData.getFullYear() < 14) {
-              setDateError("You are too young to register")
+              setDateError('You are too young to register');
             } else if (
               currentData.getFullYear() - birthData.getFullYear() >
               70
             ) {
-              setDateError("You are too old to register")
+              setDateError('You are too old to register');
             } else {
-              setDateError("")
-              if (gender === "") {
-                setGenderError("Please select your gender")
+              setDateError('');
+              if (gender === '') {
+                setGenderError('Please select your gender');
               } else {
-                setGenderError("")
+                setGenderError('');
 
-                registerSubmit()
+                registerSubmit();
               }
             }
           }}
@@ -198,7 +213,7 @@ export default function RegisterForm() {
                 />
               </div>
               <div className="reg_infos">
-                By clicking Sign Up, you agree to our{" "}
+                By clicking Sign Up, you agree to our{' '}
                 <span>Terms, Data Policy &nbsp;</span>
                 and <span>Cookie Policy.</span> You may receive SMS
                 notifications from us and can opt out at any time.
@@ -224,5 +239,5 @@ export default function RegisterForm() {
         </Formik>
       </div>
     </div>
-  )
+  );
 }

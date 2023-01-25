@@ -3,13 +3,16 @@ import React from "react"
 import LoginForm from "../../components/login/LoginForm"
 import Footer from "../../components/login/Footer"
 import RegisterForm from "../../components/login/RegisterForm"
+import { useSelector } from "react-redux"
+import { selectVisibleRegisterForm } from "../../reducers/generalSlice"
 
 export default function Login() {
+  const visibleRegisterForm = useSelector(selectVisibleRegisterForm)
   return (
     <div className="login">
       <div className="login_wrapper">
         <LoginForm />
-        <RegisterForm />
+        {visibleRegisterForm && <RegisterForm />}
         <Footer />
       </div>
     </div>
