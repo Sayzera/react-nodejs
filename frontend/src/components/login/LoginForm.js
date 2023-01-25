@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react"
 import { Form, Formik } from "formik"
 import * as Yup from "yup"
@@ -8,11 +9,22 @@ import { useDispatch } from "react-redux"
 import { setVisibleRegisterForm } from "../../reducers/generalSlice"
 import axios from "axios"
 import { setUserData } from "../../reducers/userSlice"
+=======
+import React from 'react';
+import { Form, Formik } from 'formik';
+import * as Yup from 'yup';
+import { Link } from 'react-router-dom';
+
+import LoginInput from '../../components/inputs/logininput';
+import { useDispatch } from 'react-redux';
+import { setVisibleRegisterForm } from '../../reducers/generalSlice';
+>>>>>>> 89692fc014c47216612449ef706815e9445b0243
 const loginInfos = {
-  email: "",
-  password: "",
-}
+  email: '',
+  password: '',
+};
 export default function LoginForm() {
+<<<<<<< HEAD
   const facebookIcon = process.env.PUBLIC_URL + "/icons/facebook.svg"
   const navigate = useNavigate()
   const [login, setLogin] = React.useState(loginInfos)
@@ -63,6 +75,24 @@ export default function LoginForm() {
     }
   }
 
+=======
+  const facebookIcon = process.env.PUBLIC_URL + '/icons/facebook.svg';
+  const [login, setLogin] = React.useState(loginInfos);
+  const { email, password } = login;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLogin({ ...login, [name]: value });
+  };
+  const dispatch = useDispatch();
+
+  const loginValidation = Yup.object({
+    email: Yup.string()
+      .required('Email address is required')
+      .email('Must be a valid email address')
+      .max(100, 'Email address must be less than 100 characters'),
+    password: Yup.string().required('Password is required'),
+  });
+>>>>>>> 89692fc014c47216612449ef706815e9445b0243
   return (
     <div className="login_wrap">
       <div className="login_1">
@@ -112,6 +142,7 @@ export default function LoginForm() {
             Forgotten passwor?
           </Link>
           <div className="sign_splitter"></div>
+<<<<<<< HEAD
 
           {error && (
             <div>
@@ -128,6 +159,11 @@ export default function LoginForm() {
           <button
             onClick={() => {
               dispatch(setVisibleRegisterForm(true))
+=======
+          <button
+            onClick={() => {
+              dispatch(setVisibleRegisterForm(true));
+>>>>>>> 89692fc014c47216612449ef706815e9445b0243
             }}
             className="blue_btn open_signup"
           >
@@ -140,5 +176,5 @@ export default function LoginForm() {
         </Link>
       </div>
     </div>
-  )
+  );
 }
